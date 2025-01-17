@@ -39,6 +39,14 @@
       border: 1px solid #ccc;
       border-radius: 4px;
     }
+    .checkbox-option {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: #444;
+    }
     button {
       padding: 5px 10px;
       background-color: #2196F3;
@@ -76,6 +84,10 @@
     <div class="folder-input">
       <input type="text" id="folderPath" placeholder="e.g., Images/Website">
       <button id="saveFolder">Save</button>
+    </div>
+    <div class="checkbox-option">
+      <input type="checkbox" id="orderImages">
+      <label for="orderImages">Order saved images (image_001.jpg)</label>
     </div>
     <div class="folder-path">Current folder: <span id="currentFolder">Downloads</span></div>
   </div>

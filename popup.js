@@ -4,10 +4,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const folderPath = document.getElementById('folderPath');
   const saveFolder = document.getElementById('saveFolder');
   const currentFolder = document.getElementById('currentFolder');
+  const orderImages = document.getElementById('orderImages');
 
   // Get current states
-  chrome.storage.local.get(['isActive', 'downloadFolder'], (data) => {
+  chrome.storage.local.get(['isActive', 'downloadFolder', 'orderImages', 'currentImageNumber'], (data) => {
     toggleSwitch.checked = data.isActive || false;
+    orderImages.checked = data.orderImages || false;
     updateStatus(data.isActive || false);
     
     if (data.downloadFolder) {
@@ -35,14 +37,21 @@ document.addEventListener('DOMContentLoaded', () => {
     updateStatus(isActive);
   });
 
+  orderImages.addEventListener('change', () => {
+    const isOrdered = orderImages.checked;
+    chrome.storage.local.set({ 
+      orderImages: isOrdered,
+      currentImageNumber: 1 // Reset counter when toggling
+    });
+  });
+
   saveFolder.addEventListener('click', () => {
     const folder = folderPath.value.trim();
     
-    // Clean the folder path
     const cleanFolder = folder
-      .replace(/\\/g, '/') // Convert Windows backslashes to forward slashes
-      .replace(/^\/+|\/+$/g, '') // Remove leading/trailing slashes
-      .replace(/[<>:"|?*]/g, '_'); // Replace invalid characters
+      .replace(/\\/g, '/')
+      .replace(/^\/+|\/+$/g, '')
+      .replace(/[<>:"|?*]/g, '_');
     
     chrome.storage.local.set({ downloadFolder: cleanFolder }, () => {
       currentFolder.textContent = cleanFolder || 'Downloads';
