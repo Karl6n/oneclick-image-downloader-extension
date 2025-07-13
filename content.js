@@ -68,22 +68,46 @@ function updateImageListeners() {
   }
 }
 
+// Track if currently hovering a valid image or background image
+let isHoveringImageOrBg = false;
+
+// Helper to check if an element has a background image
+function hasBackgroundImage(el) {
+  if (!el || el.tagName.toLowerCase() === 'img') return false;
+  const bg = window.getComputedStyle(el).backgroundImage;
+  return bg && bg.startsWith('url(');
+}
+
+// Update mousemove logic to show/hide cursor for <img> or background image
+// Remove previous document.addEventListener('mousemove', ...) and replace with:
+document.addEventListener('mousemove', (event) => {
+  if (!isExtensionActive) {
+    hideCursorIcon();
+    isHoveringImageOrBg = false;
+    return;
+  }
+  const target = event.target;
+  if (target.tagName.toLowerCase() === 'img' || hasBackgroundImage(target)) {
+    isHoveringImageOrBg = true;
+    createCursorIcon();
+    showCursorIcon(event.clientX, event.clientY);
+  } else {
+    isHoveringImageOrBg = false;
+    hideCursorIcon();
+  }
+});
+
+// Update handleImageHover/handleImageLeave to set isHoveringImageOrBg for <img>
 function handleImageHover(event) {
-  isHoveringImage = true;
+  isHoveringImageOrBg = true;
   createCursorIcon();
   showCursorIcon(event.clientX, event.clientY);
 }
 
 function handleImageLeave() {
-  isHoveringImage = false;
+  isHoveringImageOrBg = false;
   hideCursorIcon();
 }
-
-document.addEventListener('mousemove', (event) => {
-  if (isExtensionActive && isHoveringImage && cursorIcon) {
-    showCursorIcon(event.clientX, event.clientY);
-  }
-});
 
 function handleImageClick(event) {
   if (!isExtensionActive) return;
@@ -114,6 +138,44 @@ function handleImageClick(event) {
       showToast(`⬇️ ${filename} ✅`);
     }
   });
+}
+
+function handleBackgroundImageClick(event) {
+  if (!isExtensionActive) return;
+  // Only act if not clicking an <img>
+  if (event.target.tagName.toLowerCase() === 'img') return;
+  const bg = window.getComputedStyle(event.target).backgroundImage;
+  if (bg && bg.startsWith('url(')) {
+    // Extract the URL
+    const urlMatch = bg.match(/url\(["']?(.*?)["']?\)/);
+    if (urlMatch && urlMatch[1]) {
+      const imageUrl = urlMatch[1];
+      const filename = getFilenameFromUrl(imageUrl);
+      // Animate cursor icon (zoom in/out)
+      if (cursorIcon && cursorIcon.style.display === 'block') {
+        cursorIcon.style.transform = 'scale(1.3)';
+        cursorIcon.style.boxShadow = '0 4px 16px rgba(0,0,0,0.18)';
+        setTimeout(() => {
+          cursorIcon.style.transform = 'scale(1)';
+          cursorIcon.style.boxShadow = '0 2px 8px rgba(0,0,0,0.10)';
+        }, 90);
+      }
+      chrome.runtime.sendMessage({
+        action: "downloadImage",
+        imageUrl,
+        filename
+      }, (response) => {
+        if (chrome.runtime.lastError) {
+          console.error('Error sending message:', chrome.runtime.lastError);
+          showToast(`❌ ${filename} failed`);
+        } else {
+          showToast(`⬇️ ${filename} ✅`);
+        }
+      });
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  }
 }
 
 function getFilenameFromUrl(url) {
@@ -188,6 +250,12 @@ observer.observe(document.body, {
   childList: true,
   subtree: true
 });
+
+// Add a global click listener for background images
+if (!window._oneclick_bg_listener) {
+  document.addEventListener('click', handleBackgroundImageClick, true);
+  window._oneclick_bg_listener = true;
+}
 
 // Cleanup on navigation
 window.addEventListener('beforeunload', cleanup);
