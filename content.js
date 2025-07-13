@@ -78,12 +78,35 @@ function hasBackgroundImage(el) {
   return bg && bg.startsWith('url(');
 }
 
-// Update mousemove logic to show/hide cursor for <img> or background image
-// Remove previous document.addEventListener('mousemove', ...) and replace with:
+const HIGHLIGHT_STYLE = 'outline: 2px solid #FFA000 !important; outline-offset: 2px !important; box-shadow: 0 0 0 4px rgba(255,160,0,0.15) !important;';
+let lastHighlightedElement = null;
+
+function highlightElement(el) {
+  if (lastHighlightedElement && lastHighlightedElement !== el) {
+    lastHighlightedElement.style.outline = '';
+    lastHighlightedElement.style.outlineOffset = '';
+    lastHighlightedElement.style.boxShadow = '';
+  }
+  if (el) {
+    el.style.outline = '2px solid #FFA000';
+    el.style.outlineOffset = '2px';
+    el.style.boxShadow = '0 0 0 4px rgba(255,160,0,0.15)';
+    lastHighlightedElement = el;
+  } else {
+    if (lastHighlightedElement) {
+      lastHighlightedElement.style.outline = '';
+      lastHighlightedElement.style.outlineOffset = '';
+      lastHighlightedElement.style.boxShadow = '';
+      lastHighlightedElement = null;
+    }
+  }
+}
+
 document.addEventListener('mousemove', (event) => {
   if (!isExtensionActive) {
     hideCursorIcon();
     isHoveringImageOrBg = false;
+    highlightElement(null);
     return;
   }
   const target = event.target;
@@ -91,9 +114,11 @@ document.addEventListener('mousemove', (event) => {
     isHoveringImageOrBg = true;
     createCursorIcon();
     showCursorIcon(event.clientX, event.clientY);
+    highlightElement(target);
   } else {
     isHoveringImageOrBg = false;
     hideCursorIcon();
+    highlightElement(null);
   }
 });
 
@@ -237,6 +262,7 @@ function cleanup() {
     cursorIcon.parentNode.removeChild(cursorIcon);
   }
   cursorIcon = null;
+  highlightElement(null);
 }
 
 // Observe DOM for dynamically added images
